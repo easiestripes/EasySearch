@@ -1,4 +1,4 @@
-package sample;
+package com.austinpetrie.searchapp;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -10,28 +10,22 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
-import java.util.Scanner;
 
+import com.sun.deploy.uitoolkit.impl.fx.HostServicesFactory;
+import com.sun.javafx.application.HostServicesDelegate;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Orientation;
+import javafx.scene.control.ScrollBar;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.TextFlow;
 import org.json.*;
 
-import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.text.Text;
-import javafx.scene.web.WebView;
-import javafx.stage.Stage;
 
 public class Search {
 
@@ -47,7 +41,7 @@ public class Search {
     private Scene resultSearchScene;
 
     /*public static void main(String[] args) throws IOException {
-        // text field for url, dropdown menu for websites (put that value into websiteID, and button to sample.Search
+        // text field for url, dropdown menu for websites (put that value into websiteID, and button to Search
         // press button, call parseInput();
         Scanner input = new Scanner(System.in);
         System.out.print("Search: ");
@@ -60,35 +54,28 @@ public class Search {
         Called when search button is pressed
         Creates proper input search strings for the chosen website
      */
-    public void parseInput(String titleStr, int websiteID) throws IOException {
-        switch(websiteID) {
-            case 0:
-                titleStr = titleStr.replaceAll("\\s", "_");
-                pullWiki(titleStr);
-                break;
-            case 1:
-                titleStr = titleStr.replaceAll("\\s", "+");
-                pullGoogle(titleStr);
-                break;
-            case 2:
-                pullStackOverflow(titleStr);
-                break;
-            case 3:
-                pullYoutube(titleStr);
-                break;
-            case 4:
-                pullGithub(titleStr);
-                break;
-            default:
-                System.out.println("Incorrect websiteID"); // somehow failed to give a propr websiteID
+    public void parseInput(String titleStr, String website) throws IOException {
+        if(website.equals("Wikipedia")) {
+            titleStr = titleStr.replaceAll("\\s", "_");
+            pullWiki(titleStr);
+        } else if(website.equals("Google")) {
+            titleStr = titleStr.replaceAll("\\s", "+");
+            pullGoogle(titleStr);
+        } else if(website.equals("StackOverflow")) {
+            pullStackOverflow(titleStr);
+        } else if(website.equals("YouTube")) {
+            pullYoutube(titleStr);
+        } else if(website.equals("GitHub")) {
+            pullGithub(titleStr);
+        } else {
+            System.out.println("Incorrect website"); // somehow failed to give a proper website
         }
     }
 
-    // Wikipedia result from their sample.Search bar
+    // Wikipedia result from their Search bar
     public void pullWiki(String titleStr) throws IOException {
 
-        urlStr = wikiUrl + titleStr; // might need char regex checking/converting
-        //System.out.println(urlStr);
+        urlStr = wikiUrl + titleStr;
         URL url = new URL(urlStr);
 
         URLConnection conn = url.openConnection();
@@ -111,43 +98,35 @@ public class Search {
         String pageID = (String) jsonObj.getJSONObject("query").getJSONObject("pages").names().get(0);
         String summary = jsonObj.getJSONObject("query").getJSONObject("pages").getJSONObject(pageID).getString("extract");
 
-        //System.out.println(summary);
-        //summaryWikiText.setText(summary);
-        GridPane test = FXMLLoader.load(Main.class.getResource("sample.fxml"));
-        //getFXMLLoader().load();
-
-        //Main.primaryStage;
-
-        // Wikipedia Result Scene
+        // Build scene for wikipedia results
+        ScrollPane scrollPane = new ScrollPane();
         GridPane grid1 = new GridPane();
         grid1.setAlignment(Pos.CENTER);
         grid1.setHgap(10);
         grid1.setVgap(10);
         grid1.setPadding(new Insets(25, 25, 25, 25));
-        Scene wikiResultScene = new Scene(grid1, 300, 275);
 
-        Text summaryWikiText = new Text();
-        summaryWikiText.setText(summary);
-        grid1.add(summaryWikiText, 0, 0);
+        TextFlow summaryWikiText = new TextFlow();
+        Text t1 = new Text(summary);
+        summaryWikiText.getChildren().add(t1);
+
+        scrollPane.setFitToWidth(true);
+        scrollPane.setContent(summaryWikiText);
+        Scene wikiResultScene = new Scene(scrollPane, 300, 275);
 
         setResultSearchScene(wikiResultScene);
 
-        //Stage s = (Stage) test.getScene().getWindow();
-        //s.setScene(wikiResultScene);
-
-        // button to open entire wiki page in browser
-
-
-		/*
+        /*
+            button to open entire wiki page in browser
 			Print Synopsis/Summary and have a link to "keep reading" which reveals it all (maybe open browser)
 		 */
     }
 
-    // Google first result in their sample.Search bar, so I'm feeling lucky (or X result links and desciptions)
-    public static void pullGoogle(String titleStr) throws IOException {
+    // Google first result in their Search bar, so I'm feeling lucky (or X result links and desciptions)
+    public void pullGoogle(String titleStr) throws IOException {
 
         urlStr = googleLuckyUrl + titleStr;
-        System.out.println(urlStr);
+        //System.out.println(urlStr);
         URL url = new URL(urlStr);
 
         openWebpage(url);
@@ -158,17 +137,17 @@ public class Search {
 		 */
     }
 
-    // StackOverflow first result in their sample.Search bar, return the question and X answers (or most vote or accepted answer)
+    // StackOverflow first result in their Search bar, return the question and X answers (or most vote or accepted answer)
     public static void pullStackOverflow(String titleStr) {
 
     }
 
-    // Youtube first video in their sample.Search bar, auto play the video (or should it open it in your browser; should X results be shown?)
+    // YouTube first video in their Search bar, auto play the video (or should it open it in your browser; should X results be shown?)
     public static void pullYoutube(String titleStr) {
 
     }
 
-    // Github X results from their sample.Search bar
+    // GitHub X results from their Search bar
     public static void pullGithub(String titleStr) {
 
     }
@@ -186,11 +165,15 @@ public class Search {
     public static void openWebpage(URI uri) {
         Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
         if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
-            try {
-                desktop.browse(uri);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            Thread browser = new Thread(() -> {
+                try {
+                    Desktop.getDesktop().browse(uri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            browser.start();
+            browser.interrupt();
         }
     }
 
