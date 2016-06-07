@@ -1,5 +1,6 @@
 package com.austinpetrie.searchapp;
 
+<<<<<<< HEAD
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
@@ -25,6 +26,8 @@ import javafx.scene.text.TextFlow;
 import javafx.scene.web.WebView;
 import org.json.*;
 
+=======
+>>>>>>> 7d7298eaf0b2641ea1d84ab66b7c0df60f3017c7
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,9 +38,28 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
+<<<<<<< HEAD
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+=======
+
+import com.sun.deploy.uitoolkit.impl.fx.HostServicesFactory;
+import com.sun.javafx.application.HostServicesDelegate;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Orientation;
+import javafx.scene.control.ScrollBar;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.TextFlow;
+import org.json.*;
+
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.text.Text;
+>>>>>>> 7d7298eaf0b2641ea1d84ab66b7c0df60f3017c7
 
 public class Search {
 
@@ -49,6 +71,7 @@ public class Search {
     final private static String youtubeUrl = "";
     final private static String githubUrl = "";
     private static String urlStr;
+<<<<<<< HEAD
     //private Scene resultSearchScene;
 
     /**
@@ -56,6 +79,26 @@ public class Search {
      * Creates proper input search strings for the chosen website
      */
     public void parseInput(String titleStr, String website) throws IOException, JSONException {
+=======
+    private static int websiteID = -1;
+    private Scene resultSearchScene;
+
+    /*public static void main(String[] args) throws IOException {
+        // text field for url, dropdown menu for websites (put that value into websiteID, and button to Search
+        // press button, call parseInput();
+        Scanner input = new Scanner(System.in);
+        System.out.print("Search: ");
+        String url = input.nextLine();
+        websiteID = 1;
+        parseInput(url, websiteID);
+    }*/
+
+    /*
+        Called when search button is pressed
+        Creates proper input search strings for the chosen website
+     */
+    public void parseInput(String titleStr, String website) throws IOException {
+>>>>>>> 7d7298eaf0b2641ea1d84ab66b7c0df60f3017c7
         if(website.equals("Wikipedia")) {
             titleStr = titleStr.replaceAll("\\s", "_");
             pullWiki(titleStr);
@@ -74,7 +117,11 @@ public class Search {
     }
 
     // Wikipedia result from their Search bar
+<<<<<<< HEAD
     public void pullWiki(String titleStr) throws IOException, JSONException {
+=======
+    public void pullWiki(String titleStr) throws IOException {
+>>>>>>> 7d7298eaf0b2641ea1d84ab66b7c0df60f3017c7
 
         urlStr = wikiUrl + titleStr;
         URL url = new URL(urlStr);
@@ -111,6 +158,7 @@ public class Search {
         Text t1 = new Text(summary);
         summaryWikiText.getChildren().add(t1);
 
+<<<<<<< HEAD
         Button backBtn = new Button("Go Back");
 
         grid1.add(backBtn, 0, 0);
@@ -136,20 +184,43 @@ public class Search {
          * button to open entire wiki page in browser
          * Print Synopsis/Summary and have a link to "keep reading" which reveals it all (maybe open browser)
          */
+=======
+        scrollPane.setFitToWidth(true);
+        scrollPane.setContent(summaryWikiText);
+        Scene wikiResultScene = new Scene(scrollPane, 300, 275);
+
+        setResultSearchScene(wikiResultScene);
+
+        /*
+            button to open entire wiki page in browser
+			Print Synopsis/Summary and have a link to "keep reading" which reveals it all (maybe open browser)
+		 */
+>>>>>>> 7d7298eaf0b2641ea1d84ab66b7c0df60f3017c7
     }
 
     // Google first result in their Search bar, so I'm feeling lucky (or X result links and desciptions)
     public void pullGoogle(String titleStr) throws IOException {
 
         urlStr = googleLuckyUrl + titleStr;
+<<<<<<< HEAD
+=======
+        //System.out.println(urlStr);
+>>>>>>> 7d7298eaf0b2641ea1d84ab66b7c0df60f3017c7
         URL url = new URL(urlStr);
 
         openWebpage(url);
 
+<<<<<<< HEAD
         /*
          * Feeling Lucky opens first page in browser
          * Showing X results shows X result links and their descriptions in the app (clicking a link opens it in a browser)
          */
+=======
+		/*
+			Feeling Lucky opens first page in browser
+			Showing X results shows X result links and their descriptions in the app (clicking a link opens it in a browser)
+		 */
+>>>>>>> 7d7298eaf0b2641ea1d84ab66b7c0df60f3017c7
     }
 
     // StackOverflow first result in their Search bar, return the question and X answers (or most vote or accepted answer)
@@ -157,6 +228,7 @@ public class Search {
 
     }
 
+<<<<<<< HEAD
     /*
      * Define a global instance of a Youtube object, which will be used
      * to make YouTube Data API requests.
@@ -312,6 +384,11 @@ public class Search {
                 System.out.println("\n-------------------------------------------------------------\n");
             }
         }
+=======
+    // YouTube first video in their Search bar, auto play the video (or should it open it in your browser; should X results be shown?)
+    public static void pullYoutube(String titleStr) {
+
+>>>>>>> 7d7298eaf0b2641ea1d84ab66b7c0df60f3017c7
     }
 
     // GitHub X results from their Search bar
@@ -352,11 +429,20 @@ public class Search {
         return fxmlLoader;
     }
 
+<<<<<<< HEAD
     /*public Scene getResultSearchScene() {
+=======
+    public Scene getResultSearchScene() {
+>>>>>>> 7d7298eaf0b2641ea1d84ab66b7c0df60f3017c7
         return this.resultSearchScene;
     }
 
     public void setResultSearchScene(Scene s) {
         this.resultSearchScene = s;
+<<<<<<< HEAD
     }*/
 }
+=======
+    }
+}
+>>>>>>> 7d7298eaf0b2641ea1d84ab66b7c0df60f3017c7
